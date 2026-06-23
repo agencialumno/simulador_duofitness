@@ -91,6 +91,7 @@
           </div>
         </div>
         <select id="prazo" onchange="atualizar()">
+          <option value="36">36 meses</option>
           <option value="48">48 meses</option>
           <option value="60" selected>60 meses</option>
         </select>
@@ -150,7 +151,7 @@
       <div class="campo">
         <div class="label-row">
           <label for="mesesPromo">Período (meses)</label>
-          <input type="number" id="mesesPromo" placeholder="Ex: 3" min="1" oninput="atualizar()">
+          <input type="number" id="mesesPromo" placeholder="Ex: 3" min="1" max="6" oninput="atualizar()">
         </div>
       </div>
       <div class="campo">

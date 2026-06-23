@@ -102,12 +102,21 @@ function setVazio() {
 }
 
 function atualizar() {
+  ['nomeCondominio','aptos','valorApto','mesesPromo','mensPromo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.value) limparErro(id);
+  });
   const combo   = document.getElementById('combo').value;
   const prazo   = parseInt(document.getElementById('prazo').value);
   const cont    = document.getElementById('container').value;
   const aptos   = parseFloat(document.getElementById('aptos').value) || 0;
   const vApto   = parseFloat(document.getElementById('valorApto').value);
-  const mPromo  = parseFloat(document.getElementById('mesesPromo').value) || 0;
+  let mPromo = parseFloat(document.getElementById('mesesPromo').value) || 0;
+  if (mPromo > 6) {
+    document.getElementById('mesesPromo').value = 6;
+    mPromo = 6;
+    setErro('mesesPromo', 'O período promocional é limitado a 6 meses.');
+  }
   const mPromoV = parseFloat(document.getElementById('mensPromo').value) || 0;
 
   const d = COMBOS[combo];
@@ -171,6 +180,15 @@ function atualizar() {
   const elMens = document.getElementById('prevMensTotal');
   elMens.textContent = fmt(mensNeg);
   elMens.className = 'preview-value ' + (vApto < minApto ? 'vermelho' : 'amarelo');
+
+  // Validar valor promocional em tempo real
+  if (promoOn && mPromoV > 0 && minApto > 0) {
+    if (mPromoV < minApto) {
+      setErro('mensPromo', `Valor promocional abaixo do mínimo permitido (${fmt(minApto)} por unidade).`);
+    } else {
+      limparErro('mensPromo');
+    }
+  }
 
   salvarDados();
 }
@@ -252,6 +270,94 @@ async function gerarZip(combo, nomeRaw, aptos, vApto) {
   return { zip, nome: nomeRaw };
 }
 
+
+// ── VALIDAÇÃO DE CAMPOS ──
+function setErro(id, msg) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  input.classList.add('campo-erro');
+  let msgEl = input.parentElement.querySelector('.msg-erro');
+  if (!msgEl) {
+    msgEl = document.createElement('div');
+    msgEl.className = 'msg-erro';
+    input.parentElement.appendChild(msgEl);
+  }
+  msgEl.textContent = msg;
+  msgEl.style.display = 'block';
+}
+
+function limparErro(id) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  input.classList.remove('campo-erro');
+  const msgEl = input.parentElement.querySelector('.msg-erro');
+  if (msgEl) msgEl.style.display = 'none';
+}
+
+function limparTodosErros() {
+  ['nomeCondominio','aptos','valorApto','mesesPromo','mensPromo'].forEach(limparErro);
+}
+
+function validarCampos() {
+  limparTodosErros();
+  let valido = true;
+  let primeiroInvalido = null;
+
+  const nome  = document.getElementById('nomeCondominio').value.trim();
+  const aptos = parseFloat(document.getElementById('aptos').value);
+  const vApto = parseFloat(document.getElementById('valorApto').value);
+
+  if (!nome) {
+    setErro('nomeCondominio', 'Informe o nome do condomínio.');
+    primeiroInvalido = primeiroInvalido || 'nomeCondominio';
+    valido = false;
+  }
+
+  if (!aptos || aptos <= 0) {
+    setErro('aptos', 'Informe um número de unidades válido (maior que zero).');
+    primeiroInvalido = primeiroInvalido || 'aptos';
+    valido = false;
+  }
+
+  if (!vApto || vApto <= 0) {
+    setErro('valorApto', 'Informe um valor por unidade válido (maior que zero).');
+    primeiroInvalido = primeiroInvalido || 'valorApto';
+    valido = false;
+  }
+
+  if (promoOn) {
+    const meses  = parseFloat(document.getElementById('mesesPromo').value);
+    const vPromo = parseFloat(document.getElementById('mensPromo').value);
+
+    if (!meses || meses <= 0 || meses > 6) {
+      setErro('mesesPromo', 'Informe entre 1 e 6 meses promocionais.');
+      primeiroInvalido = primeiroInvalido || 'mesesPromo';
+      valido = false;
+    }
+
+    if (!vPromo || vPromo <= 0) {
+      setErro('mensPromo', 'Informe o valor promocional por unidade.');
+      primeiroInvalido = primeiroInvalido || 'mensPromo';
+      valido = false;
+    } else {
+      const combo   = document.getElementById('combo').value;
+      const cont    = document.getElementById('container').value;
+      const aptosV  = parseFloat(document.getElementById('aptos').value) || 0;
+      const d       = COMBOS[combo];
+      const mensCli = d.mens - (cont === 'NAO' ? d.alu : 0);
+      const minApto = aptosV > 0 ? mensCli / aptosV : 0;
+      if (minApto > 0 && vPromo < minApto) {
+        setErro('mensPromo', `Valor promocional abaixo do mínimo permitido (${fmt(minApto)} por unidade).`);
+        primeiroInvalido = primeiroInvalido || 'mensPromo';
+        valido = false;
+      }
+    }
+  }
+
+  if (primeiroInvalido) document.getElementById(primeiroInvalido).focus();
+  return valido;
+}
+
 // ── BAIXAR PPTX ──
 async function gerarProposta() {
   const btn     = document.getElementById('btnGerar');
@@ -261,8 +367,7 @@ async function gerarProposta() {
   const vApto   = parseFloat(document.getElementById('valorApto').value) || 0;
   const combo   = document.getElementById('combo').value;
 
-  if (!nomeRaw) { alert('Preencha o nome do condomínio.'); return; }
-  if (!vApto || aptos === 0) { alert('Preencha o valor por unidade e o número de unidades.'); return; }
+  if (!validarCampos()) return;
   if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
   // Estado de carregamento
@@ -307,8 +412,7 @@ async function gerarPDF() {
   const vApto   = parseFloat(document.getElementById('valorApto').value) || 0;
   const combo   = document.getElementById('combo').value;
 
-  if (!nomeRaw) { alert('Preencha o nome do condomínio.'); return; }
-  if (!vApto || aptos === 0) { alert('Preencha o valor por unidade e o número de unidades.'); return; }
+  if (!validarCampos()) return;
   if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
   // Estado de carregamento

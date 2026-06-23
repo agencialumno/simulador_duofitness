@@ -117,23 +117,6 @@ select.campo-erro {
   font-weight: 500;
 }
 
-
-/* ── VALIDAÇÃO DE CAMPOS ── */
-input.campo-erro,
-select.campo-erro {
-  border-color: var(--vermelho) !important;
-  box-shadow: 0 0 0 3px var(--vermelho-dim) !important;
-}
-
-.msg-erro {
-  display: none;
-  font-size: 11px;
-  color: var(--vermelho);
-  margin-top: 4px;
-  padding: 0 2px;
-  font-weight: 500;
-}
-
 /* ── BOTÃO LIMPAR FORMULÁRIO ── */
 .btn-limpar {
   width: 100%;
@@ -591,6 +574,24 @@ select option { background: #1a1a1a; }
 
 /* ── RESPONSIVO ── */
 @media (max-width: 768px) {
+
+  .promo-campos.aberto {
+  max-height: 300px;
+}
+
+.promo-campos.aberto label {
+  color: rgba(254,210,5,0.9);
+}
+
+  .promo-campos .label-row {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.promo-campos .campo {
+  gap: 6px;
+}
+
   .wrap {
     grid-template-columns: 1fr;
   }
@@ -637,7 +638,7 @@ select option { background: #1a1a1a; }
     white-space: normal;
     overflow-wrap: break-word;
   }
-}
+
 
 /* =========================================
    MOBILE MELHORADO
