@@ -290,8 +290,7 @@ async function gerarProposta() {
 // ── BAIXAR PDF VIA CLOUDCONVERT ──
 async function gerarPDF() {
   const btnPdf = document.getElementById('btnGerarPdf');
-  if (btnPdf.disabled) return; // evita duplo clique
-  const btnPdf  = document.getElementById('btnGerarPdf');
+  if (btnPdf.disabled) return;
   const nomeRaw = (document.getElementById('nomeCondominio').value || '').trim();
   const aptos   = parseFloat(document.getElementById('aptos').value) || 0;
   const vApto   = parseFloat(document.getElementById('valorApto').value) || 0;
