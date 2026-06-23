@@ -16,6 +16,19 @@
   --laranja-dim: rgba(255,140,0,0.12);
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  max-width: 100%;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -57,7 +70,11 @@ body::before {
   padding: 40px 24px 16px;
   text-align: center;
 }
-.logo-img { height: 56px; margin-bottom: 20px; }
+.logo-img {
+  max-width: 100%;
+  height: auto;
+  width: auto;
+}
 .header-titulo {
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
@@ -229,7 +246,7 @@ label {
   padding: 8px 12px;
   font-size: 11px;
   color: var(--texto);
-  white-space: nowrap;
+  white-space: normal;
   pointer-events: none;
   opacity: 0;
   transition: opacity .2s;
@@ -500,6 +517,29 @@ select option { background: #1a1a1a; }
   .col-preview { padding: 16px 20px; }
   .col-form { padding: 0 20px 48px; }
   .modal-equip-grid { grid-template-columns: 1fr; }
+  .col-form,
+  .col-preview {
+  width: 100%;
+  min-width: 0;
+}
+
+  input,
+    select {
+    width: 100%;
+    max-width: 100%;
+  }
+
+
+.logo-img {
+    max-width: 140px;
+    height: auto;
+  }
+
+  .header-titulo {
+    font-size: 22px;
+    white-space: normal;
+    overflow-wrap: break-word;
+  }
 }
 
 /* =========================================
@@ -658,4 +698,12 @@ select option { background: #1a1a1a; }
   .modal-box {
     padding: 16px;
   }
+}
+
+html,
+body,
+.wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
