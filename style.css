@@ -73,6 +73,7 @@ body::before {
 .logo-img {
   display: block;
   max-width: 100%;
+  width: auto;
   height: auto;
 }
 .header-titulo {
@@ -536,7 +537,7 @@ select option { background: #1a1a1a; }
   }
 
   .logo-img {
-    max-width: 140px;
+    width: 180px;
     height: auto;
   }
 }
@@ -549,7 +550,7 @@ select option { background: #1a1a1a; }
 
 
 .logo-img {
-    max-width: 140px;
+    width: 180px;
     height: auto;
   }
 
