@@ -101,6 +101,22 @@ body::before {
   gap: 14px;
 }
 
+/* ── VALIDAÇÃO DE CAMPOS ── */
+input.campo-erro,
+select.campo-erro {
+  border-color: var(--vermelho) !important;
+  box-shadow: 0 0 0 3px var(--vermelho-dim) !important;
+}
+
+.msg-erro {
+  display: none;
+  font-size: 11px;
+  color: var(--vermelho);
+  margin-top: 4px;
+  padding: 0 2px;
+  font-weight: 500;
+}
+
 /* ── CARDS DE PREVIEW (esquerda) ── */
 .preview-card {
   background: var(--card);
