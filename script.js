@@ -252,6 +252,7 @@ async function gerarZip(combo, nomeRaw, aptos, vApto) {
 // ── BAIXAR PPTX ──
 async function gerarProposta() {
   const btn     = document.getElementById('btnGerar');
+  const lblBtn  = btn.querySelector('.btn-lbl');
   const nomeRaw = (document.getElementById('nomeCondominio').value || '').trim();
   const aptos   = parseFloat(document.getElementById('aptos').value) || 0;
   const vApto   = parseFloat(document.getElementById('valorApto').value) || 0;
@@ -261,7 +262,10 @@ async function gerarProposta() {
   if (!vApto || aptos === 0) { alert('Preencha o valor por unidade e o número de unidades.'); return; }
   if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
-  btn.classList.add('loading'); btn.disabled = true;
+  // Estado de carregamento
+  btn.classList.add('loading');
+  btn.disabled = true;
+  lblBtn.textContent = 'Gerando proposta...';
 
   try {
     const { zip } = await gerarZip(combo, nomeRaw, aptos, vApto);
@@ -281,15 +285,19 @@ async function gerarProposta() {
     document.body.removeChild(a); URL.revokeObjectURL(url);
 
   } catch(e) {
-    alert('Erro ao gerar proposta: ' + e.message); console.error(e);
+    alert('Não foi possível gerar a proposta. Verifique sua conexão e tente novamente.');
+    console.error(e);
   } finally {
-    btn.classList.remove('loading'); btn.disabled = false;
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    lblBtn.textContent = 'Baixar Proposta em PowerPoint';
   }
 }
 
 // ── BAIXAR PDF VIA CLOUDCONVERT ──
 async function gerarPDF() {
-  const btnPdf = document.getElementById('btnGerarPdf');
+  const btnPdf  = document.getElementById('btnGerarPdf');
+  const lblPdf  = btnPdf.querySelector('.btn-lbl');
   if (btnPdf.disabled) return;
   const nomeRaw = (document.getElementById('nomeCondominio').value || '').trim();
   const aptos   = parseFloat(document.getElementById('aptos').value) || 0;
@@ -300,7 +308,10 @@ async function gerarPDF() {
   if (!vApto || aptos === 0) { alert('Preencha o valor por unidade e o número de unidades.'); return; }
   if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
-  btnPdf.classList.add('loading'); btnPdf.disabled = true;
+  // Estado de carregamento
+  btnPdf.classList.add('loading');
+  btnPdf.disabled = true;
+  lblPdf.textContent = 'Gerando PDF...';
 
   try {
     // 1. Gerar o PPTX preenchido em memória
@@ -383,9 +394,12 @@ async function gerarPDF() {
     document.body.removeChild(a); URL.revokeObjectURL(url);
 
   } catch(e) {
-    alert('Erro ao gerar PDF: ' + e.message); console.error(e);
+    alert('Não foi possível gerar o PDF. Verifique sua conexão e tente novamente.');
+    console.error(e);
   } finally {
-    btnPdf.classList.remove('loading'); btnPdf.disabled = false;
+    btnPdf.classList.remove('loading');
+    btnPdf.disabled = false;
+    lblPdf.textContent = 'Baixar Proposta em PDF';
   }
 }
 
