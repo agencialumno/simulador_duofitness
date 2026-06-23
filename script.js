@@ -60,8 +60,8 @@ const CATALOGO = {
   },
 };
 
-// ── CLOUDCONVERT (mover para backend após testes) ──
-const CC_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTU0N2E1MTM0ZjkyMTcyMDM0YTVhNWMxMGVkNTAwZDU1OTllMzExMmQzYmM1ZTAyOWZkZmVmMGZlOGM4NGYyZWM0ZmYzMzMzNDE5OWYyOTciLCJpYXQiOjE3ODIyNDQ5MDMuNzg4NDM1LCJuYmYiOjE3ODIyNDQ5MDMuNzg4NDM3LCJleHAiOjQ5Mzc5MTg1MDMuNzgyODMsInN1YiI6Ijc2MDgxNzM4Iiwic2NvcGVzIjpbInRhc2sucmVhZCIsInRhc2sud3JpdGUiXX0.F-UpVeBsx7MsWlaMosNw_TtT_6HjZjtAkGpa8p3MInY_NjTiEYWyHwpf2rhKa1TyHaVOyEOBia3bebuYvJUajS9gPOVQv85oIcYBQQHc6MNDR6ug80KOIX3Uzb2yj3T-g5GIq4s7duTYL3ZItM0Emn-bjlIuBkjl2yiGh_6EA8piW9J-oyDBKauCSFx9xi-WJg96b7V2Vt0wSJfSNM2-OubeUS8UOMTP2HTIZb8vhOfTv8ex_6H-CRDn0zPCbpoZnd1DYaXnL1t9oPD9l2lu-aF6fj9YIMpBjD49v6FJzx28C9yEPc0mfSbRekpnI0i4-FfQK59YDr5TGm4o0rR69reln6LK-Td431UK-y1-xqKOXKca5km8fcLZtKSM82JjEfbJtPwCgZdSeMWHWL-7R9y0DDSqP9b-j4Mv2upY7ORN0bJjJVXllAarofOjaICGcjSF2jJbypLGEaYV2ZVU_xjHgPPhIUPbu07g-bB1R7NEm58Q0VBAIBukhuYoP26rCWCy68Uoa3_sWjOP8cScu-AHTvaksBxlG1I5N-2hwPlSCJBKzUIVmKEmNBNdsoOgo9fGuk5Zn5lsfbXkDHMztbkKOaNGGxuL6Qo808NpQTJhrR1DxdLXZavqrAWlUjA8tyvYvlpAuaCrONuO2omN3YBrdYC3EZaDjaCcw7jdaRk';
+
+const CC_WORKER = 'https://seu-worker.workers.dev';;
 
 let promoOn = false;
 
@@ -312,7 +312,7 @@ async function gerarPDF() {
     });
 
     // 2. Criar job no CloudConvert
-    const jobRes = await fetch('https://api.cloudconvert.com/v2/jobs', {
+    const jobRes = await fetch(`${CC_WORKER}/jobs`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${CC_KEY}`,
@@ -335,7 +335,11 @@ async function gerarPDF() {
       })
     });
 
-    if (!jobRes.ok) throw new Error('Erro ao criar job no CloudConvert.');
+    //if (!jobRes.ok) throw new Error('Erro ao criar job no CloudConvert.');
+    if (!jobRes.ok) {
+      const errText = await jobRes.text();
+      throw new Error('Erro ao criar job: ' + jobRes.status + ' — ' + errText);
+    }
     const job = await jobRes.json();
 
     // 3. Fazer upload do PPTX
@@ -355,7 +359,7 @@ async function gerarPDF() {
     let exportTask = null;
     for (let i = 0; i < 30; i++) {
       await new Promise(r => setTimeout(r, 2000));
-      const statusRes = await fetch(`https://api.cloudconvert.com/v2/jobs/${jobId}`, {
+      const statusRes = await fetch(`${CC_WORKER}/jobs/${jobId}`, {
         headers: { 'Authorization': `Bearer ${CC_KEY}` }
       });
       const statusData = await statusRes.json();
