@@ -101,6 +101,11 @@ function setVazio() {
 }
 
 function atualizar() {
+  // Limpa erros dos campos ao corrigir
+  ['nomeCondominio','aptos','valorApto','mesesPromo','mensPromo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.value) limparErro(id);
+  });
   const combo   = document.getElementById('combo').value;
   const prazo   = parseInt(document.getElementById('prazo').value);
   const cont    = document.getElementById('container').value;
@@ -249,6 +254,83 @@ async function gerarZip(combo, nomeRaw, aptos, vApto) {
   return { zip, nome: nomeRaw };
 }
 
+
+// ── VALIDAÇÃO DE CAMPOS ──
+function setErro(id, msg) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  input.classList.add('campo-erro');
+  let msgEl = input.parentElement.querySelector('.msg-erro');
+  if (!msgEl) {
+    msgEl = document.createElement('div');
+    msgEl.className = 'msg-erro';
+    input.parentElement.appendChild(msgEl);
+  }
+  msgEl.textContent = msg;
+  msgEl.style.display = 'block';
+}
+
+function limparErro(id) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  input.classList.remove('campo-erro');
+  const msgEl = input.parentElement.querySelector('.msg-erro');
+  if (msgEl) msgEl.style.display = 'none';
+}
+
+function limparTodosErros() {
+  ['nomeCondominio','aptos','valorApto','mesesPromo','mensPromo'].forEach(limparErro);
+}
+
+function validarCampos() {
+  limparTodosErros();
+  let valido = true;
+  let primeiroInvalido = null;
+
+  const nome  = document.getElementById('nomeCondominio').value.trim();
+  const aptos = parseFloat(document.getElementById('aptos').value);
+  const vApto = parseFloat(document.getElementById('valorApto').value);
+
+  if (!nome) {
+    setErro('nomeCondominio', 'Informe o nome do condomínio.');
+    primeiroInvalido = primeiroInvalido || 'nomeCondominio';
+    valido = false;
+  }
+
+  if (!aptos || aptos <= 0) {
+    setErro('aptos', 'Informe um número de unidades válido (maior que zero).');
+    primeiroInvalido = primeiroInvalido || 'aptos';
+    valido = false;
+  }
+
+  if (!vApto || vApto <= 0) {
+    setErro('valorApto', 'Informe um valor por unidade válido (maior que zero).');
+    primeiroInvalido = primeiroInvalido || 'valorApto';
+    valido = false;
+  }
+
+  if (promoOn) {
+    const meses = parseFloat(document.getElementById('mesesPromo').value);
+    const vPromo = parseFloat(document.getElementById('mensPromo').value);
+    if (!meses || meses <= 0) {
+      setErro('mesesPromo', 'Informe a quantidade de meses promocionais.');
+      primeiroInvalido = primeiroInvalido || 'mesesPromo';
+      valido = false;
+    }
+    if (!vPromo || vPromo <= 0) {
+      setErro('mensPromo', 'Informe o valor promocional por unidade.');
+      primeiroInvalido = primeiroInvalido || 'mensPromo';
+      valido = false;
+    }
+  }
+
+  if (primeiroInvalido) {
+    document.getElementById(primeiroInvalido).focus();
+  }
+
+  return valido;
+}
+
 // ── BAIXAR PPTX ──
 async function gerarProposta() {
   const btn     = document.getElementById('btnGerar');
@@ -258,8 +340,7 @@ async function gerarProposta() {
   const vApto   = parseFloat(document.getElementById('valorApto').value) || 0;
   const combo   = document.getElementById('combo').value;
 
-  if (!nomeRaw) { alert('Preencha o nome do condomínio.'); return; }
-  if (!vApto || aptos === 0) { alert('Preencha o valor por unidade e o número de unidades.'); return; }
+  if (!validarCampos()) return;
   if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
   // Estado de carregamento
@@ -304,8 +385,7 @@ async function gerarPDF() {
   const vApto   = parseFloat(document.getElementById('valorApto').value) || 0;
   const combo   = document.getElementById('combo').value;
 
-  if (!nomeRaw) { alert('Preencha o nome do condomínio.'); return; }
-  if (!vApto || aptos === 0) { alert('Preencha o valor por unidade e o número de unidades.'); return; }
+  if (!validarCampos()) return;
   if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
   // Estado de carregamento
