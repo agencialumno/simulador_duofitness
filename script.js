@@ -14,8 +14,7 @@ const COMBOS_PENDENTES = [];
 
 const CATALOGO = {
   UNO: {
-    tag: "Combo Entrada",
-    nome: "UNO",
+    tag: "Combo Entrada", nome: "UNO",
     categorias: [
       { nome: "Cardio", itens: [["Esteira Olímpica Professional","×1"],["Bicicleta Spinning Magnética","×1"]] },
       { nome: "Máquinas de Força", itens: [["Dual Cable Crossover","×1"]] },
@@ -24,8 +23,7 @@ const CATALOGO = {
     ]
   },
   DUO: {
-    tag: "Combo Intermediário",
-    nome: "DUO",
+    tag: "Combo Intermediário", nome: "DUO",
     categorias: [
       { nome: "Cardio", itens: [["Esteira Olímpica Professional","×2"],["Bicicleta Spinning Magnética","×2"]] },
       { nome: "Máquinas de Força", itens: [["Dual Cable Crossover","×1"],["Supino Articulado","×1"]] },
@@ -34,8 +32,7 @@ const CATALOGO = {
     ]
   },
   TRIPLE: {
-    tag: "Combo Avançado",
-    nome: "TRIPLE",
+    tag: "Combo Avançado", nome: "TRIPLE",
     categorias: [
       { nome: "Cardio", itens: [["Esteira Olímpica Professional","×3"],["Bicicleta Spinning Magnética","×2"],["Elíptico","×1"]] },
       { nome: "Máquinas de Força", itens: [["Dual Cable Crossover","×2"],["Supino Articulado","×1"],["Leg Press","×1"]] },
@@ -44,8 +41,7 @@ const CATALOGO = {
     ]
   },
   PRIME: {
-    tag: "Combo Premium",
-    nome: "PRIME",
+    tag: "Combo Premium", nome: "PRIME",
     categorias: [
       { nome: "Cardio", itens: [["Esteira Olímpica Professional","×4"],["Bicicleta Spinning Magnética","×3"],["Elíptico","×2"]] },
       { nome: "Máquinas de Força", itens: [["Dual Cable Crossover","×2"],["Supino Articulado","×2"],["Leg Press","×1"],["Puxador Alto/Remada Baixa","×1"]] },
@@ -54,8 +50,7 @@ const CATALOGO = {
     ]
   },
   ELITE: {
-    tag: "Combo Elite",
-    nome: "ELITE",
+    tag: "Combo Elite", nome: "ELITE",
     categorias: [
       { nome: "Cardio", itens: [["Esteira Olímpica Professional","×5"],["Bicicleta Spinning Magnética","×4"],["Elíptico","×3"],["Remo Indoor","×1"]] },
       { nome: "Máquinas de Força", itens: [["Dual Cable Crossover","×3"],["Supino Articulado","×2"],["Leg Press","×2"],["Puxador Alto/Remada Baixa","×2"],["Voador Peitoral","×1"]] },
@@ -64,6 +59,9 @@ const CATALOGO = {
     ]
   },
 };
+
+// ── CLOUDCONVERT (mover para backend após testes) ──
+const CC_KEY = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiOTU0N2E1MTM0ZjkyMTcyMDM0YTVhNWMxMGVkNTAwZDU1OTllMzExMmQzYmM1ZTAyOWZkZmVmMGZlOGM4NGYyZWM0ZmYzMzMzNDE5OWYyOTciLCJpYXQiOjE3ODIyNDQ5MDMuNzg4NDM1LCJuYmYiOjE3ODIyNDQ5MDMuNzg4NDM3LCJleHAiOjQ5Mzc5MTg1MDMuNzgyODMsInN1YiI6Ijc2MDgxNzM4Iiwic2NvcGVzIjpbInRhc2sucmVhZCIsInRhc2sud3JpdGUiXX0.F-UpVeBsx7MsWlaMosNw_TtT_6HjZjtAkGpa8p3MInY_NjTiEYWyHwpf2rhKa1TyHaVOyEOBia3bebuYvJUajS9gPOVQv85oIcYBQQHc6MNDR6ug80KOIX3Uzb2yj3T-g5GIq4s7duTYL3ZItM0Emn-bjlIuBkjl2yiGh_6EA8piW9J-oyDBKauCSFx9xi-WJg96b7V2Vt0wSJfSNM2-OubeUS8UOMTP2HTIZb8vhOfTv8ex_6H-CRDn0zPCbpoZnd1DYaXnL1t9oPD9l2lu-aF6fj9YIMpBjD49v6FJzx28C9yEPc0mfSbRekpnI0i4-FfQK59YDr5TGm4o0rR69reln6LK-Td431UK-y1-xqKOXKca5km8fcLZtKSM82JjEfbJtPwCgZdSeMWHWL-7R9y0DDSqP9b-j4Mv2upY7ORN0bJjJVXllAarofOjaICGcjSF2jJbypLGEaYV2ZVU_xjHgPPhIUPbu07g-bB1R7NEm58Q0VBAIBukhuYoP26rCWCy68Uoa3_sWjOP8cScu-AHTvaksBxlG1I5N-2hwPlSCJBKzUIVmKEmNBNdsoOgo9fGuk5Zn5lsfbXkDHMztbkKOaNGGxuL6Qo808NpQTJhrR1DxdLXZavqrAWlUjA8tyvYvlpAuaCrONuO2omN3YBrdYC3EZaDjaCcw7jdaRk';
 
 let promoOn = false;
 
@@ -136,10 +134,8 @@ function atualizar() {
   const comBonus = extra * BONUS;
   const comTotal = comBase + comBonus;
   const comCSS   = comTotal * CSS_SPLIT;
-
   const pct = vApto / minApto - 1;
 
-  // Status
   let statusClass, statusTxt;
   if (vApto < minApto) {
     statusClass = 'status-bloqueado';
@@ -162,7 +158,6 @@ function atualizar() {
   badge.className = 'status-badge ' + statusClass;
   badge.textContent = statusTxt;
 
-  // Premiação
   const elPrem = document.getElementById('prevPremiacao');
   if (vApto < minApto) {
     elPrem.textContent = 'R$ 0,00';
@@ -172,7 +167,6 @@ function atualizar() {
     elPrem.className = 'preview-value ' + (pct >= 0.25 ? 'amarelo' : 'verde');
   }
 
-  // Mensalidade total
   const elMens = document.getElementById('prevMensTotal');
   elMens.textContent = fmt(mensNeg);
   elMens.className = 'preview-value ' + (vApto < minApto ? 'vermelho' : 'amarelo');
@@ -182,10 +176,8 @@ function abrirModal() {
   const combo = document.getElementById('combo').value;
   const cat = CATALOGO[combo];
   if (!cat) return;
-
   document.getElementById('modalNomeCombo').textContent = cat.nome;
   document.getElementById('modalTagCombo').textContent = cat.tag;
-
   const grid = document.getElementById('modalEquipGrid');
   grid.innerHTML = '';
   cat.categorias.forEach(c => {
@@ -197,7 +189,6 @@ function abrirModal() {
       ).join('');
     grid.appendChild(card);
   });
-
   document.getElementById('modalOverlay').classList.add('aberto');
 }
 
@@ -213,80 +204,67 @@ function fmtBRL(v) {
   return v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
+// ── GERA O ZIP COM O PPTX PREENCHIDO (reutilizado por PPTX e PDF) ──
+async function gerarZip(combo, nomeRaw, aptos, vApto) {
+  const arquivo = combo.toLowerCase();
+
+  if (!window.JSZip) {
+    await new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+      s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+  }
+
+  const response = await fetch(`templates/${arquivo}.pptx`);
+  if (!response.ok) throw new Error(`Template ${arquivo}.pptx não encontrado.`);
+  const arrayBuffer = await response.arrayBuffer();
+  const zip = await JSZip.loadAsync(arrayBuffer);
+
+  const nome     = nomeRaw.toUpperCase();
+  const mensApto = 'R$ ' + fmtBRL(vApto);
+  const mensCond = 'R$ ' + fmtBRL(vApto * aptos);
+  const aptosStr = String(Math.round(aptos));
+
+  const valores = {
+    NOME:       nome,
+    VALOR:      mensApto,
+    VALOR_COND: mensCond,
+    UNIDADES:   aptosStr,
+  };
+
+  const slides = Object.keys(zip.files).filter(
+    f => f.startsWith('ppt/slides/slide') && f.endsWith('.xml')
+  );
+
+  for (const slidePath of slides) {
+    let xml = await zip.file(slidePath).async('string');
+    Object.entries(valores).forEach(([chave, valor]) => {
+      xml = xml.replaceAll(`[${chave}]`, valor);
+    });
+    zip.file(slidePath, xml);
+  }
+
+  return { zip, nome: nomeRaw };
+}
+
+// ── BAIXAR PPTX ──
 async function gerarProposta() {
-  const btn      = document.getElementById('btnGerar');
-  const nomeRaw  = (document.getElementById('nomeCondominio').value || '').trim();
-  const aptos    = parseFloat(document.getElementById('aptos').value) || 0;
-  const vApto    = parseFloat(document.getElementById('valorApto').value) || 0;
-  const combo    = document.getElementById('combo').value;
+  const btn     = document.getElementById('btnGerar');
+  const nomeRaw = (document.getElementById('nomeCondominio').value || '').trim();
+  const aptos   = parseFloat(document.getElementById('aptos').value) || 0;
+  const vApto   = parseFloat(document.getElementById('valorApto').value) || 0;
+  const combo   = document.getElementById('combo').value;
 
   if (!nomeRaw) { alert('Preencha o nome do condomínio.'); return; }
   if (!vApto || aptos === 0) { alert('Preencha o valor por unidade e o número de unidades.'); return; }
+  if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
-  if (COMBOS_PENDENTES.includes(combo)) {
-    alert('Combo ' + combo + ' ainda não disponível. Aguarde o arquivo PPT.'); return;
-  }
-
-  const arquivo = combo.toLowerCase();
-  if (!window.JSZip) {
-      await new Promise((res, rej) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-        s.onload = res; s.onerror = rej;
-        document.head.appendChild(s);
-      });
-    }
-
-const response = await fetch(`templates/${arquivo}.pptx`);
-
-if (!response.ok) {
-  alert(`Template ${arquivo}.pptx não encontrado.`);
-  return;
-}
-
-const arrayBuffer = await response.arrayBuffer();
-
-const zip = await JSZip.loadAsync(arrayBuffer);
-
-  btn.classList.add('loading'); 
-  btn.disabled = true;
+  btn.classList.add('loading'); btn.disabled = true;
 
   try {
-    const nome      = nomeRaw.toUpperCase();
-    const mensApto  = 'R$ ' + fmtBRL(vApto);
-    const mensCond  = 'R$ ' + fmtBRL(vApto * aptos);
-    const aptosStr  = String(Math.round(aptos));
-
-    const valores = {
-      NOME:        nome,
-      VALOR:  mensApto,
-      VALOR_COND:  mensCond,
-      UNIDADES:    aptosStr,
-      //UNIDADES_ESP: aptosStr + ' ',
-      //VALOR_COND_PREFIXO: ': ' + mensCond + ' ',
-    };
-
-    const slides = Object.keys(zip.files)
-  .filter(
-    file =>
-      file.startsWith("ppt/slides/slide") &&
-      file.endsWith(".xml")
-  );
-
-for (const slidePath of slides) {
-
-  let xml = await zip
-    .file(slidePath)
-    .async("string");
-
-  Object.entries(valores).forEach(([chave, valor]) => {
-  xml = xml.replaceAll(`[${chave}]`, valor);
-  });
-
-  zip.file(slidePath, xml);
-}
-
-    
+    const { zip } = await gerarZip(combo, nomeRaw, aptos, vApto);
 
     const blob = await zip.generateAsync({
       type: 'blob',
@@ -296,9 +274,9 @@ for (const slidePath of slides) {
     });
 
     const url = URL.createObjectURL(blob);
-    const a   = document.createElement('a');
-    a.href    = url;
-    a.download = 'Proposta Duo Fitness ' + combo + ' - ' + nomeRaw + '.pptx';
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Proposta Duo Fitness ${combo} - ${nomeRaw}.pptx`;
     document.body.appendChild(a); a.click();
     document.body.removeChild(a); URL.revokeObjectURL(url);
 
@@ -306,6 +284,109 @@ for (const slidePath of slides) {
     alert('Erro ao gerar proposta: ' + e.message); console.error(e);
   } finally {
     btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// ── BAIXAR PDF VIA CLOUDCONVERT ──
+async function gerarPDF() {
+  const btnPdf  = document.getElementById('btnGerarPdf');
+  const nomeRaw = (document.getElementById('nomeCondominio').value || '').trim();
+  const aptos   = parseFloat(document.getElementById('aptos').value) || 0;
+  const vApto   = parseFloat(document.getElementById('valorApto').value) || 0;
+  const combo   = document.getElementById('combo').value;
+
+  if (!nomeRaw) { alert('Preencha o nome do condomínio.'); return; }
+  if (!vApto || aptos === 0) { alert('Preencha o valor por unidade e o número de unidades.'); return; }
+  if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
+
+  btnPdf.classList.add('loading'); btnPdf.disabled = true;
+
+  try {
+    // 1. Gerar o PPTX preenchido em memória
+    const { zip } = await gerarZip(combo, nomeRaw, aptos, vApto);
+    const pptxBlob = await zip.generateAsync({
+      type: 'blob',
+      mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      compression: 'DEFLATE',
+      compressionOptions: { level: 6 }
+    });
+
+    // 2. Criar job no CloudConvert
+    const jobRes = await fetch('https://api.cloudconvert.com/v2/jobs', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${CC_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        tasks: {
+          'upload-pptx': { operation: 'import/upload' },
+          'convert-pdf': {
+            operation: 'convert',
+            input: 'upload-pptx',
+            input_format: 'pptx',
+            output_format: 'pdf'
+          },
+          'export-pdf': {
+            operation: 'export/url',
+            input: 'convert-pdf'
+          }
+        }
+      })
+    });
+
+    if (!jobRes.ok) throw new Error('Erro ao criar job no CloudConvert.');
+    const job = await jobRes.json();
+
+    // 3. Fazer upload do PPTX
+    const uploadTask = job.data.tasks.find(t => t.name === 'upload-pptx');
+    const uploadUrl  = uploadTask.result.form.url;
+    const uploadParams = uploadTask.result.form.parameters;
+
+    const formData = new FormData();
+    Object.entries(uploadParams).forEach(([k, v]) => formData.append(k, v));
+    formData.append('file', pptxBlob, `proposta_${combo.toLowerCase()}.pptx`);
+
+    const upRes = await fetch(uploadUrl, { method: 'POST', body: formData });
+    if (!upRes.ok) throw new Error('Erro ao fazer upload para o CloudConvert.');
+
+    // 4. Aguardar conversão (polling)
+    const jobId = job.data.id;
+    let exportTask = null;
+    for (let i = 0; i < 30; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const statusRes = await fetch(`https://api.cloudconvert.com/v2/jobs/${jobId}`, {
+        headers: { 'Authorization': `Bearer ${CC_KEY}` }
+      });
+      const statusData = await statusRes.json();
+      const tasks = statusData.data.tasks;
+      const exp = tasks.find(t => t.name === 'export-pdf');
+      if (exp && exp.status === 'finished') {
+        exportTask = exp;
+        break;
+      }
+      const failed = tasks.find(t => t.status === 'error');
+      if (failed) throw new Error('Falha na conversão: ' + (failed.message || 'erro desconhecido'));
+    }
+
+    if (!exportTask) throw new Error('Tempo esgotado aguardando conversão.');
+
+    // 5. Baixar o PDF
+    const pdfUrl = exportTask.result.files[0].url;
+    const pdfRes = await fetch(pdfUrl);
+    const pdfBlob = await pdfRes.blob();
+
+    const url = URL.createObjectURL(pdfBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Proposta Duo Fitness ${combo} - ${nomeRaw}.pdf`;
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+
+  } catch(e) {
+    alert('Erro ao gerar PDF: ' + e.message); console.error(e);
+  } finally {
+    btnPdf.classList.remove('loading'); btnPdf.disabled = false;
   }
 }
 

@@ -409,6 +409,31 @@ select option { background: #1a1a1a; }
 .btn-gerar:hover { opacity: .9; box-shadow: 0 0 36px rgba(254,210,5,0.65), 0 0 12px rgba(254,210,5,0.45); }
 .btn-gerar:active { transform: scale(.98); }
 .btn-gerar:disabled { opacity: .45; cursor: not-allowed; }
+.btn-gerar-pdf {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 2px solid var(--amarelo);
+  border-radius: 12px;
+  color: var(--amarelo);
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: background .2s, color .2s, transform .1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.btn-gerar-pdf:hover { background: var(--amarelo-dim); }
+.btn-gerar-pdf:active { transform: scale(.98); }
+.btn-gerar-pdf:disabled { opacity: .45; cursor: not-allowed; }
+.btn-gerar-pdf .spinner { border-top-color: var(--amarelo); }
+.btn-gerar-pdf.loading .spinner { display: block; }
+.btn-gerar-pdf.loading .btn-lbl { display: none; }
+
 .spinner { width: 18px; height: 18px; border: 2px solid rgba(0,0,0,.2); border-top-color: #000; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
 .btn-gerar.loading .spinner { display: block; }
 .btn-gerar.loading .btn-lbl { display: none; }
@@ -583,7 +608,7 @@ select option { background: #1a1a1a; }
   }
 
   .logo-img {
-    height: 56px;
+    height: 42px;
     margin-bottom: 14px;
   }
 
