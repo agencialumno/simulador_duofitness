@@ -176,6 +176,20 @@
   Limpar formulário
 </button>
 
+<button class="btn-historico" onclick="abrirHistorico()">
+  ☰ Histórico de propostas
+</button>
+
+<!-- MODAL HISTÓRICO -->
+<div class="modal-overlay" id="modalHistorico" onclick="fecharHistoricoFora(event)">
+  <div class="modal-box">
+    <button class="modal-fechar" onclick="fecharHistorico()">✕</button>
+    <div class="modal-titulo-combo">Histórico</div>
+    <div class="modal-subtitulo">Últimas 20 propostas geradas</div>
+    <div id="historicoLista"></div>
+  </div>
+</div>
+
 <div class="aviso-combo" id="avisoCombo">⚠ Combo ainda não disponível — aguardando arquivo PPT</div>
 
 <!-- MODAL EQUIPAMENTOS -->

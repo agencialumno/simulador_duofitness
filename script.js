@@ -391,6 +391,8 @@ async function gerarProposta() {
     a.download = `Proposta Duo Fitness ${combo} - ${nomeRaw}.pptx`;
     document.body.appendChild(a); a.click();
     document.body.removeChild(a); URL.revokeObjectURL(url);
+    salvarHistorico('PPTX');
+    salvarHistorico('PDF');
 
   } catch(e) {
     alert('Não foi possível gerar a proposta. Verifique sua conexão e tente novamente.');
@@ -566,6 +568,101 @@ function limparFormulario() {
 
   limparTodosErros();
   atualizar();
+}
+
+// ── HISTÓRICO DE PROPOSTAS ──
+const HISTORICO_KEY = 'duofitness_historico';
+
+function salvarHistorico(tipo) {
+  const historico = JSON.parse(localStorage.getItem(HISTORICO_KEY) || '[]');
+  const novo = {
+    id:             Date.now(),
+    tipo:           tipo, // 'PPTX' ou 'PDF'
+    nomeCondominio: document.getElementById('nomeCondominio').value.trim(),
+    combo:          document.getElementById('combo').value,
+    prazo:          document.getElementById('prazo').value,
+    container:      document.getElementById('container').value,
+    aptos:          document.getElementById('aptos').value,
+    valorApto:      document.getElementById('valorApto').value,
+    promoOn:        promoOn,
+    mesesPromo:     document.getElementById('mesesPromo').value,
+    mensPromo:      document.getElementById('mensPromo').value,
+    data:           new Date().toLocaleString('pt-BR'),
+  };
+  historico.unshift(novo);
+  if (historico.length > 20) historico.splice(20);
+  localStorage.setItem(HISTORICO_KEY, JSON.stringify(historico));
+  renderizarHistorico();
+}
+
+function excluirProposta(id) {
+  const historico = JSON.parse(localStorage.getItem(HISTORICO_KEY) || '[]');
+  const novo = historico.filter(h => h.id !== id);
+  localStorage.setItem(HISTORICO_KEY, JSON.stringify(novo));
+  renderizarHistorico();
+}
+
+function reabrirProposta(id) {
+  const historico = JSON.parse(localStorage.getItem(HISTORICO_KEY) || '[]');
+  const item = historico.find(h => h.id === id);
+  if (!item) return;
+
+  document.getElementById('nomeCondominio').value = item.nomeCondominio;
+  document.getElementById('combo').value          = item.combo;
+  document.getElementById('prazo').value          = item.prazo;
+  document.getElementById('container').value      = item.container;
+  document.getElementById('aptos').value          = item.aptos;
+  document.getElementById('valorApto').value      = item.valorApto;
+  document.getElementById('mesesPromo').value     = item.mesesPromo || '';
+  document.getElementById('mensPromo').value      = item.mensPromo || '';
+
+  if (item.promoOn && !promoOn) togglePromo();
+  if (!item.promoOn && promoOn) togglePromo();
+
+  fecharHistorico();
+  atualizar();
+}
+
+function renderizarHistorico() {
+  const historico = JSON.parse(localStorage.getItem(HISTORICO_KEY) || '[]');
+  const lista = document.getElementById('historicoLista');
+  if (!lista) return;
+
+  if (historico.length === 0) {
+    lista.innerHTML = '<div class="historico-vazio">Nenhuma proposta gerada ainda.</div>';
+    return;
+  }
+
+  lista.innerHTML = historico.map(h => `
+    <div class="historico-card">
+      <div class="historico-info">
+        <div class="historico-nome">${h.nomeCondominio}</div>
+        <div class="historico-meta">
+          <span class="historico-badge">${h.combo}</span>
+          <span class="historico-badge">${h.prazo} meses</span>
+          <span class="historico-badge historico-tipo">${h.tipo}</span>
+        </div>
+        <div class="historico-data">${h.data}</div>
+      </div>
+      <div class="historico-acoes">
+        <button class="historico-btn-reabrir" onclick="reabrirProposta(${h.id})">Reabrir</button>
+        <button class="historico-btn-excluir" onclick="excluirProposta(${h.id})">✕</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function abrirHistorico() {
+  renderizarHistorico();
+  document.getElementById('modalHistorico').classList.add('aberto');
+}
+
+function fecharHistorico() {
+  document.getElementById('modalHistorico').classList.remove('aberto');
+}
+
+function fecharHistoricoFora(e) {
+  if (e.target === document.getElementById('modalHistorico')) fecharHistorico();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
