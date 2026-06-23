@@ -71,10 +71,8 @@ body::before {
   text-align: center;
 }
 .logo-img {
-  display: block;
-  width: auto;
-  height: 80px; /* desktop */
-  margin: 0 auto 24px;
+  height: 56px;
+  margin-bottom: 14px;
 }
 .header-titulo {
   font-family: 'Roboto', sans-serif;
@@ -537,11 +535,9 @@ select option { background: #1a1a1a; }
   }
 
   .logo-img {
-    height: 60px;
-    width: auto;
-    margin: 0 auto 20px;
-    height: auto;
-  }
+    height: 56px;
+    margin-bottom: 14px;
+}
   
 }
 
@@ -553,10 +549,9 @@ select option { background: #1a1a1a; }
 
 
 .logo-img {
-    height: 60px;
-    width: auto;
-    margin: 0 auto 20px;
-  }
+  height: 56px;
+  margin-bottom: 14px;
+}
 
   .header-titulo {
     font-size: 22px;
