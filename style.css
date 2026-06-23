@@ -72,9 +72,9 @@ body::before {
 }
 .logo-img {
   display: block;
-  max-width: 100%;
   width: auto;
-  height: auto;
+  height: 80px; /* desktop */
+  margin: 0 auto 24px;
 }
 .header-titulo {
   font-family: 'Roboto', sans-serif;
@@ -537,9 +537,12 @@ select option { background: #1a1a1a; }
   }
 
   .logo-img {
-    width: 180px;
+    height: 60px;
+    width: auto;
+    margin: 0 auto 20px;
     height: auto;
   }
+  
 }
 
   input,
@@ -550,8 +553,9 @@ select option { background: #1a1a1a; }
 
 
 .logo-img {
-    width: 180px;
-    height: auto;
+    height: 60px;
+    width: auto;
+    margin: 0 auto 20px;
   }
 
   .header-titulo {
