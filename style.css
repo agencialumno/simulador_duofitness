@@ -71,9 +71,9 @@ body::before {
   text-align: center;
 }
 .logo-img {
+  display: block;
   max-width: 100%;
   height: auto;
-  width: auto;
 }
 .header-titulo {
   font-family: 'Roboto', sans-serif;
@@ -513,14 +513,32 @@ select option { background: #1a1a1a; }
 
 /* ── RESPONSIVO ── */
 @media (max-width: 768px) {
-  .wrap { grid-template-columns: 1fr; }
-  .col-preview { padding: 16px 20px; }
-  .col-form { padding: 0 20px 48px; }
-  .modal-equip-grid { grid-template-columns: 1fr; }
+  .wrap {
+    grid-template-columns: 1fr;
+  }
+
+  .col-preview {
+    padding: 16px 20px;
+  }
+
+  .col-form {
+    padding: 0 20px 48px;
+  }
+
+  .modal-equip-grid {
+    grid-template-columns: 1fr;
+  }
+
   .col-form,
   .col-preview {
-  width: 100%;
-  min-width: 0;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .logo-img {
+    max-width: 140px;
+    height: auto;
+  }
 }
 
   input,
