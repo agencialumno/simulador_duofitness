@@ -71,6 +71,7 @@ function togglePromo() {
   document.getElementById('promoToggleRow').classList.toggle('ativo', promoOn);
   document.getElementById('promoCampos').classList.toggle('aberto', promoOn);
   atualizar();
+  salvarDados();
 }
 
 function fmt(v) {
@@ -101,11 +102,6 @@ function setVazio() {
 }
 
 function atualizar() {
-  // Limpa erros dos campos ao corrigir
-  ['nomeCondominio','aptos','valorApto','mesesPromo','mensPromo'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el && el.value) limparErro(id);
-  });
   const combo   = document.getElementById('combo').value;
   const prazo   = parseInt(document.getElementById('prazo').value);
   const cont    = document.getElementById('container').value;
@@ -175,6 +171,8 @@ function atualizar() {
   const elMens = document.getElementById('prevMensTotal');
   elMens.textContent = fmt(mensNeg);
   elMens.className = 'preview-value ' + (vApto < minApto ? 'vermelho' : 'amarelo');
+
+  salvarDados();
 }
 
 function abrirModal() {
@@ -254,83 +252,6 @@ async function gerarZip(combo, nomeRaw, aptos, vApto) {
   return { zip, nome: nomeRaw };
 }
 
-
-// ── VALIDAÇÃO DE CAMPOS ──
-function setErro(id, msg) {
-  const input = document.getElementById(id);
-  if (!input) return;
-  input.classList.add('campo-erro');
-  let msgEl = input.parentElement.querySelector('.msg-erro');
-  if (!msgEl) {
-    msgEl = document.createElement('div');
-    msgEl.className = 'msg-erro';
-    input.parentElement.appendChild(msgEl);
-  }
-  msgEl.textContent = msg;
-  msgEl.style.display = 'block';
-}
-
-function limparErro(id) {
-  const input = document.getElementById(id);
-  if (!input) return;
-  input.classList.remove('campo-erro');
-  const msgEl = input.parentElement.querySelector('.msg-erro');
-  if (msgEl) msgEl.style.display = 'none';
-}
-
-function limparTodosErros() {
-  ['nomeCondominio','aptos','valorApto','mesesPromo','mensPromo'].forEach(limparErro);
-}
-
-function validarCampos() {
-  limparTodosErros();
-  let valido = true;
-  let primeiroInvalido = null;
-
-  const nome  = document.getElementById('nomeCondominio').value.trim();
-  const aptos = parseFloat(document.getElementById('aptos').value);
-  const vApto = parseFloat(document.getElementById('valorApto').value);
-
-  if (!nome) {
-    setErro('nomeCondominio', 'Informe o nome do condomínio.');
-    primeiroInvalido = primeiroInvalido || 'nomeCondominio';
-    valido = false;
-  }
-
-  if (!aptos || aptos <= 0) {
-    setErro('aptos', 'Informe um número de unidades válido (maior que zero).');
-    primeiroInvalido = primeiroInvalido || 'aptos';
-    valido = false;
-  }
-
-  if (!vApto || vApto <= 0) {
-    setErro('valorApto', 'Informe um valor por unidade válido (maior que zero).');
-    primeiroInvalido = primeiroInvalido || 'valorApto';
-    valido = false;
-  }
-
-  if (promoOn) {
-    const meses = parseFloat(document.getElementById('mesesPromo').value);
-    const vPromo = parseFloat(document.getElementById('mensPromo').value);
-    if (!meses || meses <= 0) {
-      setErro('mesesPromo', 'Informe a quantidade de meses promocionais.');
-      primeiroInvalido = primeiroInvalido || 'mesesPromo';
-      valido = false;
-    }
-    if (!vPromo || vPromo <= 0) {
-      setErro('mensPromo', 'Informe o valor promocional por unidade.');
-      primeiroInvalido = primeiroInvalido || 'mensPromo';
-      valido = false;
-    }
-  }
-
-  if (primeiroInvalido) {
-    document.getElementById(primeiroInvalido).focus();
-  }
-
-  return valido;
-}
-
 // ── BAIXAR PPTX ──
 async function gerarProposta() {
   const btn     = document.getElementById('btnGerar');
@@ -340,7 +261,8 @@ async function gerarProposta() {
   const vApto   = parseFloat(document.getElementById('valorApto').value) || 0;
   const combo   = document.getElementById('combo').value;
 
-  if (!validarCampos()) return;
+  if (!nomeRaw) { alert('Preencha o nome do condomínio.'); return; }
+  if (!vApto || aptos === 0) { alert('Preencha o valor por unidade e o número de unidades.'); return; }
   if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
   // Estado de carregamento
@@ -385,7 +307,8 @@ async function gerarPDF() {
   const vApto   = parseFloat(document.getElementById('valorApto').value) || 0;
   const combo   = document.getElementById('combo').value;
 
-  if (!validarCampos()) return;
+  if (!nomeRaw) { alert('Preencha o nome do condomínio.'); return; }
+  if (!vApto || aptos === 0) { alert('Preencha o valor por unidade e o número de unidades.'); return; }
   if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
   // Estado de carregamento
@@ -483,7 +406,66 @@ async function gerarPDF() {
   }
 }
 
+
+// ── LOCALSTORAGE ──
+const STORAGE_KEY = 'duofitness_simulador';
+
+function salvarDados() {
+  const dados = {
+    nomeCondominio: document.getElementById('nomeCondominio').value,
+    combo:          document.getElementById('combo').value,
+    prazo:          document.getElementById('prazo').value,
+    container:      document.getElementById('container').value,
+    aptos:          document.getElementById('aptos').value,
+    valorApto:      document.getElementById('valorApto').value,
+    promoOn:        promoOn,
+    mesesPromo:     document.getElementById('mesesPromo').value,
+    mensPromo:      document.getElementById('mensPromo').value,
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+}
+
+function restaurarDados() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+
+    if (d.nomeCondominio) document.getElementById('nomeCondominio').value = d.nomeCondominio;
+    if (d.combo)          document.getElementById('combo').value          = d.combo;
+    if (d.prazo)          document.getElementById('prazo').value          = d.prazo;
+    if (d.container)      document.getElementById('container').value      = d.container;
+    if (d.aptos)          document.getElementById('aptos').value          = d.aptos;
+    if (d.valorApto)      document.getElementById('valorApto').value      = d.valorApto;
+    if (d.mesesPromo)     document.getElementById('mesesPromo').value     = d.mesesPromo;
+    if (d.mensPromo)      document.getElementById('mensPromo').value      = d.mensPromo;
+
+    if (d.promoOn && !promoOn) togglePromo();
+  } catch(e) {
+    console.warn('Erro ao restaurar dados:', e);
+  }
+}
+
+function limparFormulario() {
+  localStorage.removeItem(STORAGE_KEY);
+
+  document.getElementById('nomeCondominio').value = '';
+  document.getElementById('combo').value          = 'DUO';
+  document.getElementById('prazo').value          = '60';
+  document.getElementById('container').value      = 'SIM';
+  document.getElementById('aptos').value          = '100';
+  document.getElementById('valorApto').value      = '';
+  document.getElementById('mesesPromo').value     = '';
+  document.getElementById('mensPromo').value      = '';
+
+  if (promoOn) togglePromo();
+
+  limparTodosErros();
+  atualizar();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  restaurarDados();
   construirTabelaRef('SIM', 100);
   atualizar();
 });

@@ -117,6 +117,44 @@ select.campo-erro {
   font-weight: 500;
 }
 
+
+/* ── VALIDAÇÃO DE CAMPOS ── */
+input.campo-erro,
+select.campo-erro {
+  border-color: var(--vermelho) !important;
+  box-shadow: 0 0 0 3px var(--vermelho-dim) !important;
+}
+
+.msg-erro {
+  display: none;
+  font-size: 11px;
+  color: var(--vermelho);
+  margin-top: 4px;
+  padding: 0 2px;
+  font-weight: 500;
+}
+
+/* ── BOTÃO LIMPAR FORMULÁRIO ── */
+.btn-limpar {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid rgba(255, 59, 59, 0.25);
+  border-radius: 10px;
+  color: var(--vermelho);
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+  letter-spacing: .03em;
+}
+.btn-limpar:hover {
+  background: var(--vermelho-dim);
+  border-color: rgba(255, 59, 59, 0.5);
+}
+
+
 /* ── CARDS DE PREVIEW (esquerda) ── */
 .preview-card {
   background: var(--card);
