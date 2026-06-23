@@ -60,8 +60,8 @@ const CATALOGO = {
   },
 };
 
-
-const CC_WORKER = 'https://seu-worker.workers.dev';;
+// ── CLOUDCONVERT (mover para backend após testes) ──
+const CC_WORKER = 'https://withered-fire-fd56.lumno-contato.workers.dev';
 
 let promoOn = false;
 
@@ -315,7 +315,6 @@ async function gerarPDF() {
     const jobRes = await fetch(`${CC_WORKER}/jobs`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${CC_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -335,11 +334,7 @@ async function gerarPDF() {
       })
     });
 
-    //if (!jobRes.ok) throw new Error('Erro ao criar job no CloudConvert.');
-    if (!jobRes.ok) {
-      const errText = await jobRes.text();
-      throw new Error('Erro ao criar job: ' + jobRes.status + ' — ' + errText);
-    }
+    if (!jobRes.ok) throw new Error('Erro ao criar job no CloudConvert.');
     const job = await jobRes.json();
 
     // 3. Fazer upload do PPTX
@@ -360,8 +355,7 @@ async function gerarPDF() {
     for (let i = 0; i < 30; i++) {
       await new Promise(r => setTimeout(r, 2000));
       const statusRes = await fetch(`${CC_WORKER}/jobs/${jobId}`, {
-        headers: { 'Authorization': `Bearer ${CC_KEY}` }
-      });
+        });
       const statusData = await statusRes.json();
       const tasks = statusData.data.tasks;
       const exp = tasks.find(t => t.name === 'export-pdf');
