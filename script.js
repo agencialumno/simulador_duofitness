@@ -2,7 +2,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
 import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-//import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
+import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
 // ── FIREBASE STORAGE ──
 const firebaseConfig = {
@@ -16,10 +16,11 @@ const firebaseConfig = {
 
 const fbApp   = initializeApp(firebaseConfig);
 
-//initializeAppCheck(fbApp, {
-  //provider: new ReCaptchaV3Provider('6LdhHzItAAAAAMOapflWGPqhTM1IWEFV49tNKlqR'),
-  //isTokenAutoRefreshEnabled: true
-//});
+ //── APP CHECK ──
+initializeAppCheck(fbApp, {
+  provider: new ReCaptchaV3Provider('6LdhHzItAAAAAMOapflWGPqhTM1IWEFV49tNKlqR'),
+  isTokenAutoRefreshEnabled: true
+});
 
 const auth    = getAuth(fbApp);
 const storage = getStorage(fbApp);
