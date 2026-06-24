@@ -883,3 +883,21 @@ body,
   transition: background .2s;
 }
 .historico-btn-excluir:hover { background: var(--vermelho-dim); }
+
+.btn-logout {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  padding: 7px 16px;
+  background: transparent;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  color: var(--muted);
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+}
+.btn-logout:hover { border-color: var(--vermelho); color: var(--vermelho); }
+.header { position: relative; }
