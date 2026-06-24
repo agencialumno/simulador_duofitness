@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ── FIREBASE STORAGE ──
 const firebaseConfig = {
@@ -15,6 +16,7 @@ const firebaseConfig = {
 const fbApp   = initializeApp(firebaseConfig);
 const auth    = getAuth(fbApp);
 const storage = getStorage(fbApp);
+const db = getFirestore(fbApp);
 
 function mostrarPopupSalvamento() {
   const popup = document.getElementById('popupSalvamento');
@@ -447,6 +449,24 @@ function validarCampos() {
 }
 
 
+async function registrarLog(combo, nomeCondominio, tipo, nomeArquivo) {
+  try {
+    const user = auth.currentUser;
+    await addDoc(collection(db, 'logs_propostas'), {
+      vendedor:       user ? user.email : 'desconhecido',
+      nomeVendedor:   user ? (user.displayName || user.email) : 'desconhecido',
+      combo:          combo,
+      condominio:     nomeCondominio,
+      tipo:           tipo,
+      arquivo:        nomeArquivo,
+      data:           new Date().toISOString(),
+      dataFormatada:  new Date().toLocaleString('pt-BR'),
+    });
+  } catch(e) {
+    console.warn('Erro ao registrar log:', e);
+  }
+}
+
 
 // ── BAIXAR PPTX ──
 async function gerarProposta() {
@@ -483,6 +503,7 @@ async function gerarProposta() {
     await salvarNoStorage(blob, `Proposta Duo Fitness ${combo} - ${nomeRaw}.pptx`);
     document.body.removeChild(a); URL.revokeObjectURL(url);
     salvarHistorico('PPTX');
+    await registrarLog(combo, nomeRaw, 'PPTX', `Proposta Duo Fitness ${combo} - ${nomeRaw}.pptx`);
 
   } catch(e) {
     alert('Não foi possível gerar a proposta. Verifique sua conexão e tente novamente.');
@@ -590,6 +611,8 @@ async function gerarPDF() {
     a.href = url;
     a.download = `Proposta Duo Fitness ${combo} - ${nomeRaw}.pdf`;
     document.body.appendChild(a); a.click();
+    await registrarLog(combo, nomeRaw, 'PDF', `Proposta Duo Fitness ${combo} - ${nomeRaw}.pdf`);
+    salvarHistorico('PDF');
     document.body.removeChild(a); URL.revokeObjectURL(url);
 
   } catch(e) {
