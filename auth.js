@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
+//import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCG6nZw4X8KVPxy_u3CFGuz1COVBPQPHlQ",
@@ -16,10 +16,10 @@ const firebaseConfig = {
 const app      = initializeApp(firebaseConfig);
 
 // ── APP CHECK ──
-initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider('6LdhHzItAAAAAMOapflWGPqhTM1IWEFV49tNKlqR'),
-  isTokenAutoRefreshEnabled: true
-});
+//initializeAppCheck(app, {
+ // provider: new ReCaptchaV3Provider('6LdhHzItAAAAAMOapflWGPqhTM1IWEFV49tNKlqR'),
+  //isTokenAutoRefreshEnabled: true
+//});
 
 const auth     = getAuth(app);
 const db       = getFirestore(app);
