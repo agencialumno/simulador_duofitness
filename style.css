@@ -886,13 +886,11 @@ body,
 .historico-btn-excluir:hover { background: var(--vermelho-dim); }
 
 .btn-logout {
-  position: absolute;
-  top: 20px;
-  right: 24px;
-  padding: 8px 18px;
+  width: 100%;
+  padding: 10px;
   background: rgba(255, 59, 59, 0.1);
   border: 1px solid rgba(255, 59, 59, 0.4);
-  border-radius: 8px;
+  border-radius: 10px;
   color: var(--vermelho);
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
