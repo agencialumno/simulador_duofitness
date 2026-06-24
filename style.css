@@ -297,6 +297,7 @@ label {
 /* Inputs e selects */
 input[type=text],
 input[type=number],
+input[type=password],
 select {
   background: var(--card);
   border: 1px solid var(--borda);
@@ -888,16 +889,19 @@ body,
   position: absolute;
   top: 20px;
   right: 24px;
-  padding: 7px 16px;
-  background: transparent;
-  border: 1px solid var(--borda);
+  padding: 8px 18px;
+  background: rgba(255, 59, 59, 0.1);
+  border: 1px solid rgba(255, 59, 59, 0.4);
   border-radius: 8px;
-  color: var(--muted);
+  color: var(--vermelho);
   font-family: 'Roboto', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
-  transition: border-color .2s, color .2s;
+  transition: background .2s, border-color .2s;
+  letter-spacing: .03em;
 }
-.btn-logout:hover { border-color: var(--vermelho); color: var(--vermelho); }
-.header { position: relative; }
+.btn-logout:hover {
+  background: var(--vermelho-dim);
+  border-color: var(--vermelho);
+}
