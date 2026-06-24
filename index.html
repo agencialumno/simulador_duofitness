@@ -7,10 +7,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script type="module">
-    import { verificarAuth, logout } from './auth.js';
+  import { verificarAuth, logout } from './auth.js';
+  window.logout = logout;
+  document.addEventListener('DOMContentLoaded', () => {
     verificarAuth();
-    window.logout = logout;
-  </script>
+  });
+</script>
   
 </head>
 <body>
