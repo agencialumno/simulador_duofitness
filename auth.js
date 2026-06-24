@@ -111,6 +111,9 @@ function verificarAuth() {
       window.location.href = 'login.html';
       return;
     }
+    // Esconder loading overlay
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) overlay.style.display = 'none';
     // Exibir nome do usuário
     const nomeEl = document.getElementById('nomeUsuario');
     if (nomeEl) {
