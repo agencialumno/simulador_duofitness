@@ -903,3 +903,10 @@ body,
   background: var(--vermelho-dim);
   border-color: var(--vermelho);
 }
+
+.nome-usuario {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 4px;
+}

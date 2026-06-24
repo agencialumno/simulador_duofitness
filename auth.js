@@ -101,10 +101,18 @@ function verificarAuth() {
     if (!autorizado) {
       await signOut(auth);
       window.location.href = 'login.html';
+      return;
+    }
+    // Exibir nome do usuário
+    const nomeEl = document.getElementById('nomeUsuario');
+    if (nomeEl) {
+      const nome = user.displayName
+        ? user.displayName.split(' ')[0]
+        : user.email.split('@')[0];
+      nomeEl.textContent = `Olá, ${nome}!`;
     }
   });
 }
-
 async function logout() {
   await signOut(auth);
   window.location.href = 'login.html';
