@@ -467,6 +467,38 @@ async function registrarLog(combo, nomeCondominio, tipo, nomeArquivo) {
   }
 }
 
+// ── RATE LIMITING ──
+const _rateLimit = { timestamps: [], bloqueadoAte: null };
+
+function verificarRateLimit() {
+  const agora = Date.now();
+
+  // Verifica se está no período de bloqueio
+  if (_rateLimit.bloqueadoAte && agora < _rateLimit.bloqueadoAte) {
+    const espera = Math.ceil((_rateLimit.bloqueadoAte - agora) / 1000);
+    alert(`Limite atingido. Aguarde ${espera} segundo${espera > 1 ? 's' : ''}.`);
+    return false;
+  }
+
+  // Reseta se o bloqueio já passou
+  if (_rateLimit.bloqueadoAte && agora >= _rateLimit.bloqueadoAte) {
+    _rateLimit.timestamps = [];
+    _rateLimit.bloqueadoAte = null;
+  }
+
+  // Remove timestamps com mais de 1 minuto
+  _rateLimit.timestamps = _rateLimit.timestamps.filter(t => t > agora - 60000);
+
+  if (_rateLimit.timestamps.length >= 5) {
+    _rateLimit.bloqueadoAte = agora + 10000;
+    alert('Limite de 5 propostas por minuto atingido. Aguarde 10 segundos.');
+    return false;
+  }
+
+  _rateLimit.timestamps.push(agora);
+  return true;
+}
+
 
 // ── BAIXAR PPTX ──
 async function gerarProposta() {
@@ -478,6 +510,7 @@ async function gerarProposta() {
   const combo   = document.getElementById('combo').value;
 
   if (!validarCampos()) return;
+  if (!verificarRateLimit()) return;
   if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
   // Estado de carregamento
@@ -526,6 +559,7 @@ async function gerarPDF() {
   const combo   = document.getElementById('combo').value;
 
   if (!validarCampos()) return;
+  if (!verificarRateLimit()) return;
   if (COMBOS_PENDENTES.includes(combo)) { alert('Combo ' + combo + ' ainda não disponível.'); return; }
 
   // Estado de carregamento
