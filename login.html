@@ -159,53 +159,51 @@
   </div>
 
   <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { loginGoogle, loginEmail, cadastrarEmail } from './auth.js';
 
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-
-    const firebaseConfig = {
+  const firebaseConfig = {
     apiKey: "AIzaSyCG6nZw4X8KVPxy_u3CFGuz1COVBPQPHlQ",
     authDomain: "simulador-duo-fitness.firebaseapp.com",
     projectId: "simulador-duo-fitness",
     storageBucket: "simulador-duo-fitness.firebasestorage.app",
     messagingSenderId: "1029705610423",
-    appId: "1:1029705610413:web:c8a26f127a89a1a7b1c932"
-    };
+    appId: "1:1029705610423:web:c8a26f127a89a1a7b1c932"
+  };
 
-    const app  = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
 
-    // Se já está logado, redireciona direto
-    onAuthStateChanged(auth, user => {
+  // Se já está logado, redireciona direto; senão esconde o loading
+  onAuthStateChanged(auth, user => {
     document.getElementById('loadingOverlay').style.display = 'none';
     if (user) window.location.href = 'index.html';
-    });
+  });
 
-    import { loginGoogle, loginEmail, cadastrarEmail } from './auth.js';
+  let modoAtual = 'login';
 
-    let modoAtual = 'login';
+  window.loginGoogle = loginGoogle;
 
-    window.loginGoogle = loginGoogle;
+  window.trocarTab = function(modo) {
+    modoAtual = modo;
+    document.getElementById('tabLogin').classList.toggle('ativo', modo === 'login');
+    document.getElementById('tabCadastro').classList.toggle('ativo', modo === 'cadastro');
+    document.getElementById('btnAuth').textContent = modo === 'login' ? 'Entrar' : 'Cadastrar';
+    document.getElementById('authErro').style.display = 'none';
+  };
 
-    window.trocarTab = function(modo) {
-      modoAtual = modo;
-      document.getElementById('tabLogin').classList.toggle('ativo', modo === 'login');
-      document.getElementById('tabCadastro').classList.toggle('ativo', modo === 'cadastro');
-      document.getElementById('btnAuth').textContent = modo === 'login' ? 'Entrar' : 'Cadastrar';
-      document.getElementById('authErro').style.display = 'none';
-    };
-
-    window.submitAuth = function() {
-      const email = document.getElementById('loginEmail').value.trim();
-      const senha = document.getElementById('loginSenha').value;
-      if (!email || !senha) {
-        document.getElementById('authErro').textContent = 'Preencha e-mail e senha.';
-        document.getElementById('authErro').style.display = 'block';
-        return;
-      }
-      if (modoAtual === 'login') loginEmail(email, senha);
-      else cadastrarEmail(email, senha);
-    };
-  </script>
+  window.submitAuth = function() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const senha = document.getElementById('loginSenha').value;
+    if (!email || !senha) {
+      document.getElementById('authErro').textContent = 'Preencha e-mail e senha.';
+      document.getElementById('authErro').style.display = 'block';
+      return;
+    }
+    if (modoAtual === 'login') loginEmail(email, senha);
+    else cadastrarEmail(email, senha);
+  };
+</script>
 </body>
 </html>

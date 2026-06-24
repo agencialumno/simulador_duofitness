@@ -1,3 +1,91 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+// ── FIREBASE STORAGE ──
+const firebaseConfig = {
+  apiKey: "AIzaSyCG6nZw4X8KVPxy_u3CFGuz1COVBPQPHlQ",
+  authDomain: "simulador-duo-fitness.firebaseapp.com",
+  projectId: "simulador-duo-fitness",
+  storageBucket: "simulador-duo-fitness.firebasestorage.app",
+  messagingSenderId: "1029705610423",
+  appId: "1:1029705610423:web:c8a26f127a89a1a7b1c932"
+};
+
+const fbApp   = initializeApp(firebaseConfig);
+const auth    = getAuth(fbApp);
+const storage = getStorage(fbApp);
+
+function mostrarPopupSalvamento() {
+  const popup = document.getElementById('popupSalvamento');
+  const titulo = document.getElementById('popupTitulo');
+  const barra = document.getElementById('popupBarra');
+  const pct = document.getElementById('popupPct');
+  popup.classList.remove('sucesso');
+  titulo.textContent = '💾 Salvando proposta...';
+  barra.style.width = '0%';
+  pct.textContent = '0%';
+  document.getElementById('popupBarraWrap').style.display = 'block';
+  popup.classList.add('visivel');
+}
+
+function atualizarPopupProgresso(progresso) {
+  document.getElementById('popupBarra').style.width = progresso + '%';
+  document.getElementById('popupPct').textContent = Math.round(progresso) + '%';
+}
+
+function finalizarPopupSalvamento(sucesso) {
+  const popup = document.getElementById('popupSalvamento');
+  const titulo = document.getElementById('popupTitulo');
+  if (sucesso) {
+    popup.classList.add('sucesso');
+    titulo.textContent = '✓ Proposta salva com sucesso!';
+    atualizarPopupProgresso(100);
+    document.getElementById('popupBarraWrap').style.display = 'none';
+    document.getElementById('popupPct').textContent = '';
+  } else {
+    titulo.textContent = '⚠ Não foi possível salvar.';
+  }
+  setTimeout(() => {
+    popup.classList.remove('visivel');
+    setTimeout(() => popup.classList.remove('sucesso'), 350);
+  }, 3000);
+}
+
+async function salvarNoStorage(blob, nomeArquivo) {
+  try {
+    const { ref, uploadBytesResumable, getDownloadURL } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js");
+    const user = auth.currentUser;
+    const caminho = `propostas/PPTX/${nomeArquivo}`;
+    const storageRef = ref(storage, caminho);
+
+    mostrarPopupSalvamento();
+
+    await new Promise((resolve, reject) => {
+      const uploadTask = uploadBytesResumable(storageRef, blob);
+      uploadTask.on('state_changed',
+        snapshot => {
+          const progresso = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          atualizarPopupProgresso(progresso);
+        },
+        error => {
+          finalizarPopupSalvamento(false);
+          reject(error);
+        },
+        async () => {
+          const url = await getDownloadURL(uploadTask.snapshot.ref);
+          finalizarPopupSalvamento(true);
+          resolve(url);
+        }
+      );
+    });
+
+  } catch(e) {
+    finalizarPopupSalvamento(false);
+    console.warn('Erro ao salvar no Storage:', e);
+  }
+}
+
 // ── DADOS DOS COMBOS ──
 const COMBOS = {
   UNO:    { mens: 4500,  alu: 1200 },
@@ -358,6 +446,8 @@ function validarCampos() {
   return valido;
 }
 
+
+
 // ── BAIXAR PPTX ──
 async function gerarProposta() {
   const btn     = document.getElementById('btnGerar');
@@ -390,9 +480,9 @@ async function gerarProposta() {
     a.href = url;
     a.download = `Proposta Duo Fitness ${combo} - ${nomeRaw}.pptx`;
     document.body.appendChild(a); a.click();
+    await salvarNoStorage(blob, `Proposta Duo Fitness ${combo} - ${nomeRaw}.pptx`);
     document.body.removeChild(a); URL.revokeObjectURL(url);
     salvarHistorico('PPTX');
-    salvarHistorico('PDF');
 
   } catch(e) {
     alert('Não foi possível gerar a proposta. Verifique sua conexão e tente novamente.');
@@ -664,6 +754,21 @@ function fecharHistorico() {
 function fecharHistoricoFora(e) {
   if (e.target === document.getElementById('modalHistorico')) fecharHistorico();
 }
+
+// ── EXPOR FUNÇÕES GLOBAIS (necessário para type="module") ──
+window.togglePromo      = togglePromo;
+window.atualizar        = atualizar;
+window.abrirModal       = abrirModal;
+window.fecharModal      = fecharModal;
+window.fecharModalFora  = fecharModalFora;
+window.gerarProposta    = gerarProposta;
+window.gerarPDF         = gerarPDF;
+window.limparFormulario = limparFormulario;
+window.excluirProposta  = excluirProposta;
+window.reabrirProposta  = reabrirProposta;
+window.abrirHistorico   = abrirHistorico;
+window.fecharHistorico  = fecharHistorico;
+window.fecharHistoricoFora = fecharHistoricoFora;
 
 document.addEventListener('DOMContentLoaded', () => {
   restaurarDados();
