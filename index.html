@@ -11,6 +11,11 @@
   window.logout = logout;
   document.addEventListener('DOMContentLoaded', () => {
     verificarAuth();
+    // Esconder o loading após verificar auth
+    setTimeout(() => {
+      const overlay = document.getElementById('loadingOverlay');
+      if (overlay) overlay.style.display = 'none';
+    }, 2000);
   });
 </script>
   
@@ -226,6 +231,23 @@
   <a href="mailto:atendimento@agencialumno.com.br">atendimento@agencialumno.com.br</a>
   <a href="https://wa.me/5521975996032?text=Estou%20precisando%20de%20suporte%20sobre%20o%20simulador%20de%20propostas%20Duo%20Fitness" target="_blank">WhatsApp</a>
 </footer>
+
+<div id="loadingOverlay" style="
+  position: fixed; inset: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+">
+  <div style="
+    width: 40px; height: 40px;
+    border: 3px solid rgba(254,210,5,0.2);
+    border-top-color: #fed205;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+  "></div>
+</div>
 
 </body>
 
