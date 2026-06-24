@@ -62,11 +62,11 @@ function finalizarPopupSalvamento(sucesso) {
   }, 3000);
 }
 
-async function salvarNoStorage(blob, nomeArquivo) {
+async function salvarNoStorage(blob, nomeArquivo, tipo = 'PPTX') {
   try {
     const { ref, uploadBytesResumable, getDownloadURL } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js");
     const user = auth.currentUser;
-    const caminho = `propostas/PPTX/${nomeArquivo}`;
+    const caminho = `propostas/${tipo}/${nomeArquivo}`;
     const storageRef = ref(storage, caminho);
 
     mostrarPopupSalvamento();
@@ -653,9 +653,11 @@ async function gerarPDF() {
     a.href = url;
     a.download = `Proposta Duo Fitness ${combo} - ${nomeRaw}.pdf`;
     document.body.appendChild(a); a.click();
-    await registrarLog(combo, nomeRaw, 'PDF', `Proposta Duo Fitness ${combo} - ${nomeRaw}.pdf`);
+    document.body.removeChild(a); 
+    URL.revokeObjectURL(url);
+    await salvarNoStorage(pdfBlob, `Proposta Duo Fitness ${combo} - ${nomeRaw}.pdf`, 'PDF');
     salvarHistorico('PDF');
-    document.body.removeChild(a); URL.revokeObjectURL(url);
+    await registrarLog(combo, nomeRaw, 'PDF', `Proposta Duo Fitness ${combo} - ${nomeRaw}.pdf`);
 
   } catch(e) {
     alert('Não foi possível gerar o PDF. Verifique sua conexão e tente novamente.');
