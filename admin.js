@@ -33,7 +33,7 @@ async function verificarAdmin(email) {
 
 // ── AUTH STATE ──
 onAuthStateChanged(auth, async user => {
-  if (!user) { window.location.href = 'login.html'; return; }
+  if (!user) { window.location.href = 'login-admin.html'; return; }
 
   const isAdmin = await verificarAdmin(user.email);
   if (!isAdmin) {
