@@ -114,6 +114,7 @@ function verificarAuth() {
     // Esconder loading overlay
     const overlay = document.getElementById('loadingOverlay');
     if (overlay) overlay.style.display = 'none';
+    if (typeof window.iniciarHeartbeat === 'function') window.iniciarHeartbeat(user);
     // Exibir nome do usuário
     const nomeEl = document.getElementById('nomeUsuario');
     if (nomeEl) {

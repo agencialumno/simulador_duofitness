@@ -541,7 +541,7 @@ async function gerarProposta() {
     a.href = url;
     a.download = `Proposta Duo Fitness ${combo} - ${nomeRaw}.pptx`;
     document.body.appendChild(a); a.click();
-    await salvarNoStorage(blob, `Proposta Duo Fitness ${combo} - ${nomeRaw}.pptx`);
+    await salvarNoStorage(blob, `Proposta Duo Fitness ${combo} - ${nomeRaw}.pptx`, 'PPTX');
     document.body.removeChild(a); URL.revokeObjectURL(url);
     salvarHistorico('PPTX');
     await registrarLog(combo, nomeRaw, 'PPTX', `Proposta Duo Fitness ${combo} - ${nomeRaw}.pptx`);
@@ -836,6 +836,26 @@ window.reabrirProposta  = reabrirProposta;
 window.abrirHistorico   = abrirHistorico;
 window.fecharHistorico  = fecharHistorico;
 window.fecharHistoricoFora = fecharHistoricoFora;
+
+// ── HEARTBEAT ONLINE ──
+async function iniciarHeartbeat(user) {
+  const { getFirestore, doc, setDoc, deleteDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+  const db = getFirestore(fbApp);
+  const docRef = doc(db, 'usuarios_online', user.uid);
+
+  async function heartbeat() {
+    await setDoc(docRef, {
+      email: user.email,
+      nome: user.displayName || user.email.split('@')[0],
+      ultimoAcesso: serverTimestamp(),
+    });
+  }
+
+  await heartbeat();
+  setInterval(heartbeat, 30000);
+
+  window.addEventListener('beforeunload', () => deleteDoc(docRef));
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   restaurarDados();
