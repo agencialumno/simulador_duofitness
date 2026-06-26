@@ -354,7 +354,7 @@ window.fazerLogout = async function() {
     try { await deleteDoc(doc(db, 'usuarios_online', usuarioAtual.uid)); } catch(e) {}
   }
   await signOut(auth);
-  window.location.href = 'login.html';
+  window.location.href = 'login-admin.html';
 };
 
 function fecharSidebar() {

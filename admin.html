@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
+<script>
+  if (localStorage.getItem('duofitness_tema') === 'claro')
+    document.documentElement.classList.add('tema-claro');
+</script>
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,6 +65,8 @@
   </nav>
 
   <div class="sidebar-footer">
+    <div class="sidebar-footer">
+    <button class="btn-tema" id="btnTemaAdmin" title="Mudar tema">🌙</button>
     <div class="sidebar-user">
       <div class="sidebar-avatar" id="sidebarAvatar">?</div>
       <div class="sidebar-user-info">
@@ -73,16 +81,17 @@
 <!-- MAIN -->
 <div class="main">
   <div class="topbar">
-  <div class="topbar-info">
-    <div class="topbar-titulo" id="topbarTitulo">Propostas Geradas</div>
-    <div class="topbar-sub" id="topbarSub">Todas as propostas geradas pelos usuários</div>
+    <div class="topbar-info">
+      <div class="topbar-titulo" id="topbarTitulo">Propostas Geradas</div>
+      <div class="topbar-sub" id="topbarSub">Todas as propostas geradas pelos usuários</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="online-badge">
+        <div class="online-dot"></div>
+        <span id="onlineCount">0</span> online agora
+      </div>
+    </div>
   </div>
-  <div class="online-badge">
-    <div class="online-dot"></div>
-    <span id="onlineCount">0</span> online agora
-  </div>
-</div>
-
   <div class="content">
 
     <!-- ── SEÇÃO: PROPOSTAS ── -->
@@ -247,6 +256,12 @@
 
   </div>
 </div>
+
+<script type="module">
+  import { iniciarTema, alternarTema } from './tema.js';
+  iniciarTema();
+  document.getElementById('btnTemaAdmin').addEventListener('click', alternarTema);
+</script>
 
 <script type="module" src="admin.js"></script>
 

@@ -1,35 +1,38 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulador de Proposta — Duo Fitness</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    if (localStorage.getItem('duofitness_tema') === 'claro')
+      document.documentElement.classList.add('tema-claro');
+  </script>
   <script type="module">
-  import { verificarAuth, logout } from './auth.js';
-  window.logout = logout;
-  document.addEventListener('DOMContentLoaded', () => {
-    verificarAuth();
-    // Esconder o loading após verificar auth
-    setTimeout(() => {
-      const overlay = document.getElementById('loadingOverlay');
-      if (overlay) overlay.style.display = 'none';
-    }, 2000);
-  });
-</script>
-<script src="https://www.google.com/recaptcha/api.js?render=6LdhHzltAAAAMOapflWGPqhTM1IWEFV49tNKlqR"></script>
-  
+    import { verificarAuth, logout } from './auth.js';
+    import { iniciarTema, alternarTema } from './tema.js';
+    window.logout = logout;
+    window.alternarTema = alternarTema;
+    document.addEventListener('DOMContentLoaded', () => {
+      verificarAuth();
+      iniciarTema();
+      setTimeout(() => {
+        const overlay = document.getElementById('loadingOverlay');
+        if (overlay) overlay.style.display = 'none';
+      }, 2000);
+    });
+  </script>
+  <script src="https://www.google.com/recaptcha/api.js?render=6LdhHzltAAAAMOapflWGPqhTM1IWEFV49tNKlqR"></script>
 </head>
-<body>
-  <!-- Scripts -->
-<script type = "module" src="script.js"></script>
+<!-- Scripts -->
+<script type="module" src="script.js"></script>
 
 <div class="wrap">
   <!-- HEADER -->
   <header class="header">
     <img class="logo-img" src="assets/Logo sem fundo.png" alt="Duo Fitness"/>
     <div class="nome-usuario" id="nomeUsuario"></div>
+    <button class="btn-tema" onclick="alternarTema()" title="Mudar tema">🌙</button>
     <h1 class="header-titulo">Simulador de Proposta <span>Duo Fitness</span></h1>
   </header>
   
@@ -68,16 +71,22 @@
 
   <!-- COLUNA DIREITA: FORMULÁRIO -->
   <div class="col-form">
-    <div class="campo">
-      <div class="label-row">
-        <label for="nomeCondominio">Nome do Condomínio</label>
-        <div class="tooltip-wrap">
-          <span class="ico-info">i</span>
-          <div class="tooltip-box">Informe o nome completo do condomínio para personalizar a proposta.</div>
-        </div>
+
+  <div class="tema-toggle-row" onclick="alternarTema()">
+    <span class="tema-toggle-label" id="temaLabel">☀️ Alternar para claro</span>
+    <div class="switch-pill" id="switchTema"></div>
+  </div>
+
+  <div class="campo">
+    <div class="label-row">
+      <label for="nomeCondominio">Nome do Condomínio</label>
+      <div class="tooltip-wrap">
+        <span class="ico-info">i</span>
+        <div class="tooltip-box">Informe o nome completo do condomínio para personalizar a proposta.</div>
       </div>
-      <input type="text" id="nomeCondominio" placeholder="Ex: Residencial Jardins">
     </div>
+    <input type="text" id="nomeCondominio" placeholder="Ex: Residencial Jardins">
+  </div>
 
     <div class="campo-grid-2">
       <div class="campo">
