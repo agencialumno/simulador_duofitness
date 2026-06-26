@@ -730,3 +730,259 @@ html.tema-claro .suporte-item { color: #111827; }
   background: rgba(255,255,255,.04);
   color: var(--texto);
 }
+
+/* ── TEMA CLARO (admin) correções ── */
+html.tema-claro .nav-section {
+  color: #333333;
+}
+
+html.tema-claro .nav-item {
+  color: #333333;
+}
+
+html.tema-claro .nav-item:hover {
+  background: rgba(0,0,0,0.05);
+  color: #111111;
+}
+
+html.tema-claro .nav-item.ativo {
+  background: rgba(180,130,0,0.12);
+  color: #7a5e00;
+}
+
+html.tema-claro .sidebar-label {
+  color: #555555;
+}
+
+html.tema-claro .sidebar-user-nome {
+  color: #111111;
+}
+
+html.tema-claro .sidebar-user-email {
+  color: #555555;
+}
+
+html.tema-claro .sidebar-avatar {
+  background: rgba(180,130,0,0.12);
+  border-color: rgba(180,130,0,0.35);
+  color: #7a5e00;
+}
+
+html.tema-claro .topbar-titulo {
+  color: #111111;
+}
+
+html.tema-claro .topbar-sub {
+  color: #555555;
+}
+
+html.tema-claro .metrica-label {
+  color: #555555;
+}
+
+html.tema-claro .metrica-valor {
+  color: #111111;
+}
+
+html.tema-claro .metrica-valor.amarelo {
+  color: #7a5e00;
+}
+
+html.tema-claro .metrica-valor.verde {
+  color: #1a7a3a;
+}
+
+html.tema-claro .card-tabela-titulo {
+  color: #111111;
+}
+
+html.tema-claro thead th {
+  color: #444444;
+  border-color: rgba(0,0,0,0.10);
+}
+
+html.tema-claro tbody td {
+  color: #111111;
+  border-color: rgba(0,0,0,0.07);
+}
+
+html.tema-claro tbody tr:hover td {
+  background: rgba(0,0,0,0.03);
+}
+
+html.tema-claro .badge-pptx {
+  background: rgba(180,130,0,0.12);
+  color: #7a5e00;
+  border-color: rgba(180,130,0,0.35);
+}
+
+html.tema-claro .badge-pdf {
+  background: rgba(30,80,200,0.10);
+  color: #1a3fa0;
+  border-color: rgba(30,80,200,0.25);
+}
+
+html.tema-claro .badge-verde {
+  background: rgba(0,140,60,0.10);
+  color: #1a7a3a;
+  border-color: rgba(0,140,60,0.25);
+}
+
+html.tema-claro .btn-secundario {
+  border-color: rgba(0,0,0,0.20);
+  color: #333333;
+}
+
+html.tema-claro .btn-secundario:hover {
+  background: rgba(0,0,0,0.05);
+  color: #111111;
+}
+
+html.tema-claro .btn-sair {
+  border-color: rgba(180,0,0,0.35);
+  color: #aa0000;
+}
+
+html.tema-claro .btn-sair:hover {
+  background: rgba(180,0,0,0.08);
+}
+
+html.tema-claro .filtro-input {
+  background: #ffffff;
+  border-color: rgba(0,0,0,0.18);
+  color: #111111;
+}
+
+html.tema-claro .filtro-input::placeholder {
+  color: #888888;
+}
+
+html.tema-claro .online-card {
+  background: #ffffff;
+  border-color: rgba(0,0,0,0.10);
+}
+
+html.tema-claro .online-card-nome {
+  color: #111111;
+}
+
+html.tema-claro .online-card-email {
+  color: #555555;
+}
+
+html.tema-claro .usuario-email {
+  color: #111111;
+}
+
+html.tema-claro .add-usuario-form input {
+  background: #ffffff;
+  border-color: rgba(0,0,0,0.18);
+  color: #111111;
+}
+
+html.tema-claro .suporte-titulo {
+  color: #111111;
+}
+
+html.tema-claro .suporte-item {
+  background: #f4f5f7;
+  border-color: rgba(0,0,0,0.10);
+  color: #111111;
+}
+
+html.tema-claro .suporte-item-label {
+  color: #555555;
+}
+
+html.tema-claro .suporte-item-valor {
+  color: #111111;
+}
+
+html.tema-claro .sidebar-footer .btn-tema {
+  border-color: rgba(0,0,0,0.18);
+  color: #333333;
+}
+
+html.tema-claro .sidebar-footer .btn-tema:hover {
+  background: rgba(0,0,0,0.05);
+  color: #111111;
+}
+
+html.tema-claro .vazio {
+  color: #777777;
+}
+
+html.tema-claro .topbar {
+  background: rgba(0,0,0,0.85);
+}
+
+html.tema-claro .topbar-titulo {
+  color: #ffffff;
+}
+
+html.tema-claro .topbar-sub {
+  color: rgba(255,255,255,0.6);
+}
+
+html.tema-claro .sidebar {
+  background: #111111;
+  border-color: rgba(255,255,255,0.08);
+}
+
+html.tema-claro .sidebar-logo {
+  border-color: rgba(255,255,255,0.08);
+}
+
+html.tema-claro .sidebar-label {
+  color: rgba(255,255,255,0.4);
+}
+
+html.tema-claro .nav-section {
+  color: rgba(255,255,255,0.35);
+}
+
+html.tema-claro .nav-item {
+  color: rgba(255,255,255,0.6);
+}
+
+html.tema-claro .nav-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: #ffffff;
+}
+
+html.tema-claro .nav-item.ativo {
+  background: var(--amarelo-dim);
+  color: var(--amarelo);
+}
+
+html.tema-claro .sidebar-footer {
+  border-color: rgba(255,255,255,0.08);
+}
+
+html.tema-claro .sidebar-user-nome {
+  color: #ffffff;
+}
+
+html.tema-claro .sidebar-user-email {
+  color: rgba(255,255,255,0.5);
+}
+
+html.tema-claro .sidebar-footer .btn-tema {
+  border-color: rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.7);
+}
+
+html.tema-claro .sidebar-footer .btn-tema:hover {
+  background: rgba(255,255,255,0.06);
+  color: #ffffff;
+}
+
+html.tema-claro .btn-baixar {
+  background: rgba(180,130,0,0.12);
+  border-color: rgba(180,130,0,0.35);
+  color: #7a5e00;
+}
+
+html.tema-claro .btn-baixar:hover {
+  background: rgba(180,130,0,0.20);
+}

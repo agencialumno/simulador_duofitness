@@ -1,7 +1,7 @@
 // ── FIREBASE AUTH + FIRESTORE ──
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, query, where, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app-check.js";
 
 const firebaseConfig = {
@@ -39,6 +39,20 @@ async function emailAutorizado(email) {
   }
 }
 
+async function registrarLogin(user, metodo) {
+  try {
+    await addDoc(collection(db, 'logs_login'), {
+      email: user.email,
+      nome: user.displayName || user.email.split('@')[0],
+      metodo: metodo, // 'google' ou 'email'
+      data: new Date().toISOString(),
+      dataFormatada: new Date().toLocaleString('pt-BR'),
+    });
+  } catch(e) {
+    console.error('Erro ao registrar log de login:', e);
+  }
+}
+
 function mostrarErro(msg) {
   const el = document.getElementById('authErro');
   if (el) { el.textContent = msg; el.style.display = 'block'; }
@@ -53,6 +67,7 @@ async function loginGoogle() {
       mostrarErro('Acesso não autorizado. Entre em contato com o administrador.');
       return;
     }
+    await registrarLogin(result.user, 'Google');
     window.location.href = 'index.html';
   } catch(e) {
     mostrarErro('Erro ao fazer login com Google. Tente novamente.');
@@ -69,6 +84,7 @@ async function loginEmail(email, senha) {
       mostrarErro('Acesso não autorizado. Entre em contato com o administrador.');
       return;
     }
+    await registrarLogin(result.user, 'E-mail');
     window.location.href = 'index.html';
   } catch(e) {
     if (e.code === 'auth/invalid-credential') {
@@ -78,7 +94,6 @@ async function loginEmail(email, senha) {
     }
   }
 }
-
 async function cadastrarEmail(email, senha) {
   try {
     const autorizado = await emailAutorizado(email);

@@ -197,34 +197,63 @@
       </div>
     </div>
 
-    <!-- ── SEÇÃO: LOGS ── -->
-    <div class="secao" id="secao-logs">
-      <div class="card-tabela">
-        <div class="card-tabela-header">
-          <div class="card-tabela-titulo">Logs de Acesso</div>
-          <div class="filtros">
-            <input class="filtro-input" type="text" id="filtroLog" placeholder="Buscar..." oninput="filtrarLogs()">
-            <button class="btn-secundario" onclick="exportarCSV()">⬇ Exportar CSV</button>
-          </div>
-        </div>
-        <div style="overflow-x:auto;">
-          <table>
-            <thead>
-              <tr>
-                <th>Usuário</th>
-                <th>Condomínio</th>
-                <th>Combo</th>
-                <th>Tipo</th>
-                <th>Data</th>
-              </tr>
-            </thead>
-            <tbody id="tabelaLogs">
-              <tr><td colspan="5" class="vazio">Carregando...</td></tr>
-            </tbody>
-          </table>
+  <!-- ── SEÇÃO: LOGS ── -->
+<div class="secao" id="secao-logs">
+
+  <div style="display:flex;gap:10px;margin-bottom:16px;">
+    <button class="btn-primario" id="btnAbaPropostas" onclick="alternarAbaLog('propostas')">Logs de Propostas</button>
+    <button class="btn-secundario" id="btnAbaLogin" onclick="alternarAbaLog('login')">Logs de Acesso</button>
+  </div>
+
+  <div id="abaLogsPropostas">
+    <div class="card-tabela">
+      <div class="card-tabela-header">
+        <div class="card-tabela-titulo">Logs de Propostas</div>
+        <div class="filtros">
+          <input class="filtro-input" type="text" id="filtroLog" placeholder="Buscar..." oninput="filtrarLogs()">
+          <button class="btn-secundario" onclick="exportarCSV()">⬇ Exportar CSV</button>
         </div>
       </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Usuário</th><th>Condomínio</th><th>Combo</th><th>Tipo</th><th>Data</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaLogs">
+            <tr><td colspan="5" class="vazio">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+  </div>
+
+  <div id="abaLogsLogin" style="display:none;">
+    <div class="card-tabela">
+      <div class="card-tabela-header">
+        <div class="card-tabela-titulo">Logs de Acesso</div>
+        <div class="filtros">
+  <input class="filtro-input" type="text" id="filtroLogLogin" placeholder="Buscar..." oninput="filtrarLogsLogin()">
+  <button class="btn-secundario" onclick="exportarCSVLogin()">⬇ Exportar CSV</button>
+</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>E-mail</th><th>Nome</th><th>Método</th><th>Data</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaLogsLogin">
+            <tr><td colspan="4" class="vazio">Carregando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
 
     <!-- ── SEÇÃO: SUPORTE ── -->
     <div class="secao" id="secao-suporte">

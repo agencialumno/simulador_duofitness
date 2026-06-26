@@ -55,10 +55,11 @@ onAuthStateChanged(auth, async user => {
 
   // Carregar dados
   await Promise.all([
-    carregarPropostas(),
-    carregarUsuarios(),
-    carregarLogs(),
-  ]);
+  carregarPropostas(),
+  carregarUsuarios(),
+  carregarLogs(),
+  carregarLogsLogin(),
+]);
 
   // Listener em tempo real para usuários online
   ouvirOnline();
@@ -374,3 +375,57 @@ document.addEventListener('DOMContentLoaded', () => {
     fecharSidebar();
   });
 });
+
+let todosLogsLogin = [];
+
+async function carregarLogsLogin() {
+  const q = query(collection(db, 'logs_login'), orderBy('data', 'desc'), limit(500));
+  const snap = await getDocs(q);
+  todosLogsLogin = snap.docs.map(d => d.data());
+  renderizarLogsLogin(todosLogsLogin);
+}
+
+function renderizarLogsLogin(lista) {
+  const tbody = document.getElementById('tabelaLogsLogin');
+  if (!tbody) return;
+  if (lista.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" class="vazio">Nenhum log encontrado.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = lista.map(l => `<tr>
+    <td style="font-size:11px">${l.email || '—'}</td>
+    <td>${l.nome || '—'}</td>
+    <td><span class="badge badge-verde">${l.metodo || '—'}</span></td>
+    <td style="font-size:11px;color:var(--muted)">${l.dataFormatada || '—'}</td>
+  </tr>`).join('');
+}
+
+window.filtrarLogsLogin = function() {
+  const txt = document.getElementById('filtroLogLogin').value.toLowerCase();
+  const filtrado = todosLogsLogin.filter(l =>
+    (l.email||'').toLowerCase().includes(txt) ||
+    (l.nome||'').toLowerCase().includes(txt)
+  );
+  renderizarLogsLogin(filtrado);
+};
+
+window.alternarAbaLog = function(aba) {
+  document.getElementById('abaLogsPropostas').style.display = aba === 'propostas' ? '' : 'none';
+  document.getElementById('abaLogsLogin').style.display = aba === 'login' ? '' : 'none';
+  document.getElementById('btnAbaPropostas').className = aba === 'propostas' ? 'btn-primario' : 'btn-secundario';
+  document.getElementById('btnAbaLogin').className = aba === 'login' ? 'btn-primario' : 'btn-secundario';
+};
+
+window.exportarCSVLogin = function() {
+  const header = 'E-mail,Nome,Método,Data\n';
+  const rows = todosLogsLogin.map(l =>
+    `"${l.email||''}","${l.nome||''}","${l.metodo||''}","${l.dataFormatada||''}"`
+  ).join('\n');
+  const blob = new Blob(['\uFEFF' + header + rows], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `logs_acesso_duo_fitness_${new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')}.csv`;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+};
